@@ -21,8 +21,8 @@ class ExcelResponse(HttpResponse):
 
     def __init__(self, data, output_name='excel_data', headers=None,
                  force_csv=False, encoding='utf8'):
-        import StringIO
-        output = StringIO.StringIO()
+        import io
+        output = io.StringIO()
         output, mimetype, file_ext = make_excel_content(data, output, headers, force_csv, encoding)
         if DJANGO_1_7:
             super(ExcelResponse, self).__init__(
@@ -38,7 +38,7 @@ class ExcelResponse(HttpResponse):
 
 
 def _make_naive(value):
-    if isinstance(value, basestring):
+    if isinstance(value, str):
         return value
     if timezone.is_aware(value):
         return timezone.make_naive(value, pytz.timezone(settings.TIME_ZONE))
@@ -54,7 +54,7 @@ def make_excel_content(data, output=None, headers=None, force_csv=False, encodin
     if hasattr(data, '__getitem__'):
         if isinstance(data[0], dict):
             if headers is None:
-                headers = data[0].keys()
+                headers = list(data[0].keys())
             data = [[row[col] for col in headers] for row in data]
             data.insert(0, headers)
         if hasattr(data[0], '__getitem__'):
@@ -97,8 +97,8 @@ def make_excel_content(data, output=None, headers=None, force_csv=False, encodin
         for rowx, row in enumerate(data):
             out_row = []
             for colx, value in enumerate(row):
-                if not isinstance(value, basestring):
-                    value = unicode(value)
+                if not isinstance(value, str):
+                    value = str(value)
                 if colx in (3, 10):
                     value = _make_naive(value)
                 value = value.encode(encoding)

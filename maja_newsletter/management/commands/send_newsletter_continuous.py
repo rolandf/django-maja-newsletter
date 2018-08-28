@@ -22,7 +22,7 @@ class Command(NoArgsCommand):
         send_all = True
 
         if verbose:
-            print 'Starting sending newsletters...'
+            print('Starting sending newsletters...')
 
         activate(settings.LANGUAGE_CODE)
 

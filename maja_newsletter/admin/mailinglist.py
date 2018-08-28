@@ -87,8 +87,8 @@ class MailingListAdmin(admin.ModelAdmin):
         new_mailing = MailingList(name=_('Merging list at %s') % when,
                                   description=_('Mailing list created by merging at %s') % when)
         new_mailing.save()
-        new_mailing.subscribers = subscribers.keys()
-        new_mailing.unsubscribers = unsubscribers.keys()
+        new_mailing.subscribers = list(subscribers.keys())
+        new_mailing.unsubscribers = list(unsubscribers.keys())
 
         if not request.user.is_superuser and USE_WORKGROUPS:
             for workgroup in request_workgroups(request):
@@ -101,7 +101,7 @@ class MailingListAdmin(admin.ModelAdmin):
 
     def exportation_links(self, mailinglist):
         """Display links for exportation"""
-        return u'<a href="%s">%s</a> / <a href="%s">%s</a>' % (
+        return '<a href="%s">%s</a> / <a href="%s">%s</a>' % (
             reverse('admin:maja_newsletter_mailinglist_export_excel',
                     args=[mailinglist.pk]), _('Excel'),
             reverse('admin:maja_newsletter_mailinglist_export_vcard',

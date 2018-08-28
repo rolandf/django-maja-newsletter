@@ -101,7 +101,7 @@ class NewsLetterSender(object):
         for attachment in self.attachments:
             message.attach(attachment)
 
-        for header, value in self.newsletter.server.custom_headers.items():
+        for header, value in list(self.newsletter.server.custom_headers.items()):
             message[header] = value
 
         return message
@@ -242,7 +242,7 @@ class Mailer(NewsLetterSender):
 
         number_of_recipients = len(expedition_list)
         if self.verbose:
-            print('%i emails will be sent' % number_of_recipients)
+            print(('%i emails will be sent' % number_of_recipients))
 
         i = 1
         for contact in expedition_list:
@@ -251,7 +251,7 @@ class Mailer(NewsLetterSender):
                     newsletter_id=self.newsletter.pk
             ).exists() or self.test:
                 if self.verbose:
-                    print('- Processing %s/%s (%s)' % (i, number_of_recipients, contact.pk))
+                    print(('- Processing %s/%s (%s)' % (i, number_of_recipients, contact.pk)))
 
                 try:
                     message = self.build_message(contact)
@@ -355,13 +355,13 @@ class SMTPMailer(object):
                     self.smtp.quit()
                     self.smtp_connect()
                 try:
-                    self.smtp.sendmail(*nl.next())
+                    self.smtp.sendmail(*next(nl))
                 except StopIteration:
                     del sending[nl_id]
                 except Exception as e:
                     nl.throw(e)
                 else:
-                    nl.next()
+                    next(nl)
 
                 if SLEEP_BETWEEN_SENDING and delay:
                     time.sleep(delay)
@@ -421,17 +421,17 @@ class NewsLetterExpedition(NewsLetterSender):
 
         number_of_recipients = len(expedition_list)
         if self.verbose:
-            print('%s %s: %i emails will be sent' % (
+            print(('%s %s: %i emails will be sent' % (
                 now().strftime('%Y-%m-%d'),
-                title, number_of_recipients))
+                title, number_of_recipients)))
 
         try:
             i = 1
             for contact in expedition_list:
                 if self.verbose:
-                    print('%s %s: processing %s/%s (%s)' % (
+                    print(('%s %s: processing %s/%s (%s)' % (
                         now().strftime('%H:%M:%S'),
-                        title, i, number_of_recipients, contact.pk))
+                        title, i, number_of_recipients, contact.pk)))
                 try:
                     message = self.build_message(contact)
                     yield (smart_text(self.newsletter.header_sender),

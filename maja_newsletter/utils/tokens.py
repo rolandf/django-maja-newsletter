@@ -15,7 +15,7 @@ class ContactTokenGenerator(object):
         """Method for generating the token"""
         from hashlib import sha1
 
-        token = sha1(settings.SECRET_KEY + unicode(contact.id) +
+        token = sha1(settings.SECRET_KEY + str(contact.id) +
                      contact.email).hexdigest()[::2]
         return token
 

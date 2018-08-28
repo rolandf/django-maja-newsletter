@@ -1,5 +1,5 @@
 """ModelAdmin for Contact"""
-import StringIO
+import io
 
 from django.conf import settings
 from django.conf.urls import patterns
@@ -88,7 +88,7 @@ class ContactAdmin(admin.ModelAdmin):
         queryset = queryset.prefetch_related('content_object')
         if USE_CELERY:
             export_vcard.delay(queryset, request.user.email, export_name)
-            self.message_user(request, _(u'Export started, it will be sent by email soon'))
+            self.message_user(request, _('Export started, it will be sent by email soon'))
         else:
             return vcard_contacts_export_response(queryset)
     export_vcard.short_description = _('Export contacts as VCard')
@@ -100,7 +100,7 @@ class ContactAdmin(admin.ModelAdmin):
         queryset = queryset.prefetch_related('content_object')
         if USE_CELERY:
             export_excel.delay(queryset, request.user.email, export_name)
-            self.message_user(request, _(u'Export started, it will be sent by email soon'))
+            self.message_user(request, _('Export started, it will be sent by email soon'))
         else:
             return ExcelResponse(queryset, export_name)
     export_excel.short_description = _('Export contacts in Excel')
@@ -108,13 +108,13 @@ class ContactAdmin(admin.ModelAdmin):
     def disable_contacts(self, request, queryset):
         """Disable selected contacts"""
         updated = queryset.update(valid=False)
-        self.message_user(request, _(u'%s contacts disabled') % updated)
+        self.message_user(request, _('%s contacts disabled') % updated)
     disable_contacts.short_description = _('Disable contacts')
 
     def enable_contacts(self, request, queryset):
         """Enable selected contacts"""
         updated = queryset.update(valid=True)
-        self.message_user(request, _(u'%s contacts enabled') % updated)
+        self.message_user(request, _('%s contacts enabled') % updated)
     enable_contacts.short_description = _('Enable contacts')
 
     def create_mailinglist(self, request, queryset):
@@ -150,7 +150,7 @@ class ContactAdmin(admin.ModelAdmin):
 
         if request.POST:
             source = request.FILES.get('source') or \
-                     StringIO.StringIO(request.POST.get('source', ''))
+                     io.StringIO(request.POST.get('source', ''))
             if not request.user.is_superuser and USE_WORKGROUPS:
                 workgroups = request_workgroups(request)
             else:

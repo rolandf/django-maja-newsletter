@@ -38,9 +38,9 @@ except AttributeError:
 
 class SendBatch(models.Model):
     server = models.ForeignKey('SMTPServer')
-    emails = models.IntegerField(_(u'emails batch'))
-    date_create = models.DateTimeField(_(u'add date'), auto_now_add=True)
-    user = models.ForeignKey(User, verbose_name=_(u'operator'), null=True)
+    emails = models.IntegerField(_('emails batch'))
+    date_create = models.DateTimeField(_('add date'), auto_now_add=True)
+    user = models.ForeignKey(User, verbose_name=_('operator'), null=True)
 
     class Meta:
         verbose_name = _('email batch')
