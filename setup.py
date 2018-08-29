@@ -39,5 +39,5 @@ setup(name='django-maja-newsletter',
           'xlrd',
           'premailer',
           'pytz',
-          'celery>=3.1,<3.2'
+          'celery'
       ])
