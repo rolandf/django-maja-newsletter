@@ -1,9 +1,9 @@
 """Utils for newsletter"""
-from BeautifulSoup import BeautifulSoup
+from bs4 import BeautifulSoup
 import premailer
 
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.encoding import smart_text
 
 from maja_newsletter.models import Link

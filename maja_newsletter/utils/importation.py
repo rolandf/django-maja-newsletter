@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
 
-from tagging.models import Tag
+from taggit.models import Tag
 
 from maja_newsletter.models import Contact
 from maja_newsletter.models import MailingList

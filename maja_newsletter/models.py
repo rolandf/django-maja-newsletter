@@ -15,7 +15,7 @@ from django.utils.encoding import force_text, smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
 
-from tagging.fields import TagField
+from taggit.managers import TaggableManager
 from maja_newsletter.managers import ContactManager
 from maja_newsletter.settings import BASE_PATH
 from maja_newsletter.settings import MAILER_HARD_LIMIT
@@ -37,7 +37,7 @@ except AttributeError:
 
 
 class SendBatch(models.Model):
-    server = models.ForeignKey('SMTPServer',on_delete=models.DO_NOTHING)
+    server = models.ForeignKey('SMTPServer', on_delete=models.DO_NOTHING)
     emails = models.IntegerField(_('emails batch'))
     date_create = models.DateTimeField(_('add date'), auto_now_add=True)
     user = models.ForeignKey(User, verbose_name=_('operator'), null=True,on_delete=models.DO_NOTHING)
@@ -138,7 +138,7 @@ class Contact(models.Model):
     subscriber = models.BooleanField(_('subscriber'), default=True)
     valid = models.BooleanField(_('valid email'), default=True)
     tester = models.BooleanField(_('contact tester'), default=False)
-    tags = TagField(_('tags'))
+    tags = TaggableManager()
 
     content_type = models.ForeignKey(ContentType, blank=True, null=True, on_delete=models.DO_NOTHING)
     object_id = models.PositiveIntegerField(blank=True, null=True)
@@ -250,7 +250,7 @@ class Newsletter(models.Model):
     content = models.TextField(_('content'), help_text=_('Or paste an URL.'),
                                default=_('<body>\n<!-- Edit your newsletter here -->\n</body>'))
 
-    mailing_list = models.ForeignKey(MailingList, verbose_name=_('mailing list'))
+    mailing_list = models.ForeignKey(MailingList, verbose_name=_('mailing list'), on_delete=models.DO_NOTHING)
     test_contacts = models.ManyToManyField(Contact, verbose_name=_('test contacts'),
                                            blank=True)
 

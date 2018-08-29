@@ -2,11 +2,10 @@
 import io
 
 from django.conf import settings
-from django.conf.urls import patterns
 from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import DatabaseError
 from django.dispatch import Signal
 from django.http import HttpResponseRedirect
@@ -216,7 +215,7 @@ class ContactAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(ContactAdmin, self).get_urls()
-        my_urls = patterns('',
+        my_urls = [
                            url(r'^import/$',
                                self.admin_site.admin_view(self.importation),
                                name='newsletter_contact_import'),
@@ -228,5 +227,5 @@ class ContactAdmin(admin.ModelAdmin):
                                name='newsletter_contact_export_vcard'),
                            url(r'^export/excel/$',
                                self.admin_site.admin_view(self.exportation_excel),
-                               name='newsletter_contact_export_excel'),)
+                               name='newsletter_contact_export_excel'),]
         return my_urls + urls

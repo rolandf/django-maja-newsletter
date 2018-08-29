@@ -1,5 +1,11 @@
 """ModelAdmin for Newsletter"""
-from html.parser import HTMLParseError
+from html.parser import HTMLParser
+from html.entities import name2codepoint
+try:
+    from html.parser import HTMLParseError
+except ImportError:  # Python 3.5+
+    class HTMLParseError(Exception):
+        pass
 
 from django import forms
 from django.db import models

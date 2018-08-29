@@ -1,9 +1,8 @@
 """ModelAdmin for MailingList"""
 from django.contrib import admin
 from django.conf.urls import url
-from django.conf.urls import patterns
 from django.utils.encoding import smart_str
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.utils.timezone import now
 from django.utils.translation import ugettext_lazy as _
@@ -123,11 +122,11 @@ class MailingListAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(MailingListAdmin, self).get_urls()
-        my_urls = patterns('',
+        my_urls = [
                            url(r'^export/vcard/(?P<mailinglist_id>\d+)/$',
                                self.admin_site.admin_view(self.exportion_vcard),
                                name='maja_newsletter_mailinglist_export_vcard'),
                            url(r'^export/excel/(?P<mailinglist_id>\d+)/$',
                                self.admin_site.admin_view(self.exportion_excel),
-                               name='maja_newsletter_mailinglist_export_excel'))
+                               name='maja_newsletter_mailinglist_export_excel')]
         return my_urls + urls
